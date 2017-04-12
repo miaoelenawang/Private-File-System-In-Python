@@ -10,15 +10,11 @@ class file(object):
         self.name = name   #readme.txt
         self.size = size
         self.used = 0
-        #self.data = '0' * size
         self.start = start
             
 class fd():
     def __init__(self, file, mode):
         self.file = file # able to access file's attributes: name,size,used,start
-        # self.size = file.size
-        #self.used = file.used
-        #self.data = file.data
         self.pos  = 0
         self.mode = mode
         
@@ -29,10 +25,8 @@ class fs(object):
         self.max_size = size
         self.used_size = 0
         self.wd = self.root # working directory
-        self.wd_path = "/"
-        
-        self.open_fds = []
-        
+        self.wd_path = "/"       
+        self.open_fds = []       
         self.occupied_bytes = [False] * size
         self.fdata = '\0' * size
         
@@ -89,7 +83,6 @@ class fs(object):
         fname = get_string_file(filename)
         path  = get_string_path(filename)
         # change directory (if necessary)
-        #self.go_to_path(path)
         # get the file
         file = self.go_to_file(filename)
         
@@ -192,14 +185,13 @@ class fs(object):
                 elif item =='..':
                     # parent directory, go up one
                     current_dir = current_dir.parent
-                    # new_path.pop(-1) # pop the inner-most directory
+                  
                 else:
                     # go to sub-directory of current
                     current_dir = current_dir.dir[item]
-                    # new_path.append(item)
+           
                     
             except Exception as e:
-                # print(str(e))
                 raise Exception("Error getting directory: could not find {}".format(item))
                 
         return current_dir
@@ -226,18 +218,6 @@ class fs(object):
         except:
             return False
         
-        # if dirname[0] == '/':
-        #     list_dir = dirname.split('/')
-        #     list_dir.pop(0)
-        # if dirname[0] != '/':
-        #     list_dir = dirname.split('/')
-        # target_dir = self.root
-        # for each_dir in list_dir:
-        #     if each_dir not in target_dir.dir:
-        #         return False
-        #     else:
-        #         target_dir = target_dir.dir[ each_dir ]
-        #         return True
         
     def listdir(self,dirname):
         target_dir = self.go_to_path(dirname)
@@ -279,7 +259,6 @@ class fs(object):
             self.occupied_bytes[i] = False
     
     def create(self, filename, nbytes):
-        #path = self.get_path(filename)
         file_name = get_string_file(filename)
         target_dir = self.go_to_path(get_string_path(filename))
         if self.max_size < self.used_size + nbytes:
@@ -287,7 +266,6 @@ class fs(object):
         else:
             # attempt to create the file
             index = self.find_spot(nbytes)
-            # print("index: " + str(index))
             
             if index != None:
                 # we have a spot for our new file
